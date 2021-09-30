@@ -12,7 +12,7 @@ import com.wesley.bookstore.domain.Livro;
 @Repository
 public interface LivroRepository extends JpaRepository<Livro, Integer> {
 
-	@Query("SELECT obj FROM Livro obj WHER obj.categoria.id = id_cat ORDER BY titulo")
+	@Query("SELECT obj FROM Livro obj WHERE obj.categoria.id = id_cat ORDER BY titulo")
 	List<Livro> findAllByCategoria(@Param(value = "id_cat") Integer id_cat);
 
 }
