@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.wesley.bookstore.domain.Categoria;
@@ -23,11 +23,11 @@ public class CategoriaService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tpo: " + Categoria.class.getName()));
 	}
-	
+
 	public List<Categoria> findAll() {
 		return repository.findAll();
 	}
-	
+
 	public Categoria create(Categoria obj) {
 		obj.setId(null);
 		return repository.save(obj);
@@ -42,6 +42,11 @@ public class CategoriaService {
 
 	public void delete(Integer id) {
 		findById(id);
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new com.wesley.bookstore.service.exceptions.DataIntegrityViolationExceptions(
+					"Categoria não pode ser deletada! Possui livro associados");
+		}
 	}
 }
