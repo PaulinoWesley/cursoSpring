@@ -39,6 +39,7 @@ public class LivroResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@GetMapping
 	public ResponseEntity<List<LivroDTO>> findAll(
 			@RequestParam(value = "categoria", defaultValue = "0") Integer id_cat) {
 		List<Livro> list = service.findAll(id_cat);
